@@ -1,63 +1,195 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Leyla Döner TV Menu</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leyla Döner - Digital Menu Board</title>
+    <style>
+        :root {
+            --primary-yellow: #ffcc00;
+            --accent-red: #e62e00;
+            --bg-dark: #000000;
+            --text-white: #ffffff;
+            --transition-speed: 1s;
+        }
 
-<style>
-html, body {
-    margin: 0;
-    padding: 0;
-    background: #000;
-    overflow: hidden;
-}
+        body, html {
+            margin: 0; padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            font-family: 'Arial Black', Gadget, sans-serif;
+            height: 100vh; width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-.slider {
-    position: fixed;
-    inset: 0;
-}
+        .background {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, #222 0%, #000 100%);
+            z-index: -1;
+        }
 
-.slide {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-}
+        /* NEW HEADER STRIP (Replaces Footer) */
+        .top-info-bar {
+            background: var(--primary-yellow);
+            color: black;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            font-size: 1.8rem;
+            font-weight: bold;
+            border-bottom: 4px solid var(--accent-red);
+            z-index: 10;
+        }
 
-.slide img {
-    width: 100vw;
-    height: 100vh;
-    object-fit: contain; /* change to cover if you want full fill */
-    background: #000;
-}
+        .slide {
+            display: none;
+            padding: 20px 40px;
+            flex-grow: 1;
+            box-sizing: border-box;
+            animation: fadeIn var(--transition-speed);
+        }
 
-.slide.active {
-    opacity: 1;
-}
-</style>
+        .active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            height: 100%;
+        }
+
+        h2 {
+            background: var(--accent-red);
+            padding: 8px 15px;
+            font-size: 2rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            text-transform: uppercase;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 5px;
+        }
+
+        .item-name { font-size: 1.5rem; }
+        .price { color: var(--primary-yellow); font-weight: bold; font-size: 1.7rem; }
+        
+        .image-placeholder {
+            width: 100%;
+            height: 280px;
+            background: #111;
+            border: 3px solid var(--accent-red);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        
+        .image-placeholder img { width: 100%; height: 100%; object-fit: cover; }
+    </style>
 </head>
-
 <body>
 
-<div class="slider">
-    <div class="slide active">
-        <img src="menu1.jpeg">
+<div class="background"></div>
+
+<div class="top-info-bar">
+    <span>LEYLA DÖNER</span>
+    <span style="color: var(--accent-red);">DÖNER NUR 6,00 €</span>
+    <span>📞 0176 43573663</span>
+</div>
+
+<div id="slide1" class="slide active">
+    <div class="menu-grid">
+        <div class="col">
+            <h2>Kebab & Dürüm</h2>
+            <div class="item"><span>01. Kebab</span> <span class="price">7,00</span></div>
+            <div class="item"><span>02. Kebab XXL</span> <span class="price">8,00</span></div>
+            <div class="item"><span>03. Halloumi Kebab</span> <span class="price">8,50</span></div>
+            <div class="item"><span>11. Dürüm Kebab</span> <span class="price">8,00</span></div>
+            <div class="item"><span>12. Lahmacun Fleisch</span> <span class="price">9,00</span></div>
+            <div class="image-placeholder"><img src="doner.png" alt="Döner"></div>
+        </div>
+        
+        <div class="col">
+            <h2>Teller & Box</h2>
+            <div class="item"><span>06. Teller Pommes</span> <span class="price">12,00</span></div>
+            <div class="item"><span>07. Teller Nudeln</span> <span class="price">12,00</span></div>
+            <div class="item"><span>14. Box Pommes</span> <span class="price">7,00</span></div>
+            <div class="item"><span>15. Box Nudeln</span> <span class="price">7,00</span></div>
+            <div class="item"><span>16. Box Fleisch pur</span> <span class="price">10,00</span></div>
+            <div class="image-placeholder"><img src="https://via.placeholder.com/600x300?text=Teller+Bild" alt="Teller"></div>
+        </div>
+
+        <div class="col">
+            <h2>Pizza (28cm)</h2>
+            <div class="item"><span>17. Pizza Leyla</span> <span class="price">13,00</span></div>
+            <div class="item"><span>19. Pizza Margherita</span> <span class="price">10,00</span></div>
+            <div class="item"><span>20. Pizza Veggie</span> <span class="price">13,00</span></div>
+            <div class="item"><span>21. Pizza Hawaii</span> <span class="price">15,00</span></div>
+            <div class="item"><span>22. Pizza Thunfisch</span> <span class="price">13,00</span></div>
+            <div class="image-placeholder"><img src="https://via.placeholder.com/600x300?text=Pizza+Bild" alt="Pizza"></div>
+        </div>
     </div>
-    <div class="slide">
-        <img src="menu2.jpeg">
+</div>
+
+<div id="slide2" class="slide">
+    <div class="menu-grid">
+        <div class="col">
+            <h2>Burger & Spezial</h2>
+            <div class="item"><span>28. Hamburger</span> <span class="price">6,00</span></div>
+            <div class="item"><span>29. Cheeseburger</span> <span class="price">7,00</span></div>
+            <div class="item"><span>31. Doppel Burger</span> <span class="price">8,00</span></div>
+            <div class="item"><span>32. Schnitzel Teller</span> <span class="price">13,00</span></div>
+            <div class="item"><span>34. Nuggets 9er</span> <span class="price">10,00</span></div>
+            <div class="image-placeholder"><img src="https://via.placeholder.com/600x300?text=Burger+Bild" alt="Burger"></div>
+        </div>
+        
+        <div class="col">
+            <h2>Vegetarisch</h2>
+            <div class="item"><span>36. Veggie Döner</span> <span class="price">6,00</span></div>
+            <div class="item"><span>41. Halloumi Döner</span> <span class="price">7,00</span></div>
+            <div class="item"><span>39. Falafel Dürüm</span> <span class="price">8,00</span></div>
+            <div class="item"><span>42. Veggie Teller</span> <span class="price">13,00</span></div>
+            <div class="item"><span>44. Pommes Groß</span> <span class="price">5,00</span></div>
+            <div class="image-placeholder"><img src="https://via.placeholder.com/600x300?text=Veggie+Bild" alt="Vegetarisch"></div>
+        </div>
+
+        <div class="col">
+            <h2>Salate</h2>
+            <div class="item"><span>45. Chef Salat</span> <span class="price">8,00</span></div>
+            <div class="item"><span>47. City Salat</span> <span class="price">8,00</span></div>
+            <div class="item"><span>51. Insalata Mista</span> <span class="price">9,00</span></div>
+            <div class="item"><span>53. Kreta Salat</span> <span class="price">7,00</span></div>
+            <div class="item"><span>54. Salat Leyla</span> <span class="price">7,00</span></div>
+            <div class="image-placeholder"><img src="https://via.placeholder.com/600x300?text=Salat+Bild" alt="Salat"></div>
+        </div>
     </div>
 </div>
 
 <script>
-const slides = document.querySelectorAll('.slide');
-let index = 0;
-
-setInterval(() => {
-    slides[index].classList.remove('active');
-    index = (index + 1) % slides.length;
-    slides[index].classList.add('active');
-}, 10000); // 5 seconds
+    // let currentSlide = 1;
+    // function showSlides() {
+    //     document.getElementById('slide1').classList.remove('active');
+    //     document.getElementById('slide2').classList.remove('active');
+        
+    //     currentSlide = currentSlide === 1 ? 2 : 1;
+    //     document.getElementById('slide' + currentSlide).classList.add('active');
+    // }
+    // setInterval(showSlides, 15000);
 </script>
 
 </body>
