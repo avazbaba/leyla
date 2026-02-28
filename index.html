@@ -218,22 +218,22 @@
 </div>
 
 <script>
-    // function showSlides() {
-    //     const s1 = document.getElementById('slide1');
-    //     const s2 = document.getElementById('slide2');
-    //     if(s1.classList.contains('active')){
-    //         s1.classList.remove('active');
-    //         s1.style.display = 'none';
-    //         s2.classList.add('active');
-    //         s2.style.display = 'flex';
-    //     } else {
-    //         s2.classList.remove('active');
-    //         s2.style.display = 'none';
-    //         s1.classList.add('active');
-    //         s1.style.display = 'flex';
-    //     }
-    // }
-    // setInterval(showSlides, 10000);
+    function showSlides() {
+        const s1 = document.getElementById('slide1');
+        const s2 = document.getElementById('slide2');
+        if(s1.classList.contains('active')){
+            s1.classList.remove('active');
+            s1.style.display = 'none';
+            s2.classList.add('active');
+            s2.style.display = 'flex';
+        } else {
+            s2.classList.remove('active');
+            s2.style.display = 'none';
+            s1.classList.add('active');
+            s1.style.display = 'flex';
+        }
+    }
+    setInterval(showSlides, 10000);
 </script>
 
 </body>
