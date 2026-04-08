@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leyla Döner - Menu Board</title>
+    <title>Leyla Döner - TV Menu</title>
     <style>
         :root {
-            --bg-1: #130f0f;
-            --bg-2: #070505;
-            --panel: #181111;
-            --panel-border: #3b1f1f;
-            --brand-yellow: #ffd33d;
-            --brand-red: #d82b1f;
-            --text-main: #fff7e6;
-            --text-soft: #d0c2b6;
-            --price-bg: #2a2016;
-            --shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+            --bg: #0d0d0d;
+            --panel: #161414;
+            --panel-2: #1f1b1a;
+            --line: #3a2b25;
+            --yellow: #ffd447;
+            --orange: #ff9e2c;
+            --red: #d93527;
+            --white: #fff8ed;
+            --soft: #d2c5b5;
+            --shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
         }
 
         * {
@@ -26,10 +26,11 @@
             margin: 0;
             width: 100%;
             height: 100%;
-            font-family: "Trebuchet MS", "Arial Black", "Segoe UI", sans-serif;
-            color: var(--text-main);
-            background: radial-gradient(110% 140% at 80% 5%, #3a1711 0%, var(--bg-1) 45%, var(--bg-2) 100%);
             overflow: hidden;
+            font-family: "Segoe UI", "Trebuchet MS", Arial, sans-serif;
+            color: var(--white);
+            background:
+                radial-gradient(120% 130% at 100% 0%, #311d15 0%, #171212 45%, #0d0d0d 100%);
         }
 
         body::before {
@@ -37,97 +38,119 @@
             position: fixed;
             inset: 0;
             background:
-                linear-gradient(120deg, rgba(216, 43, 31, 0.15), transparent 35%),
-                repeating-linear-gradient(
-                    90deg,
-                    rgba(255, 255, 255, 0.02) 0 1px,
-                    transparent 1px 24px
-                );
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 2px, transparent 2px 24px),
+                linear-gradient(125deg, rgba(255, 164, 51, 0.08), transparent 35%);
             pointer-events: none;
             z-index: -2;
         }
 
-        .layout {
+        .wrap {
             height: 100%;
-            display: flex;
-            flex-direction: column;
-            padding: 1.2vh 1.4vw 1.4vh;
-            gap: 1.2vh;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 1.1vh;
+            padding: 1.2vh 1.2vw 1.2vh;
         }
 
-        .top-bar {
-            background: linear-gradient(90deg, #ffd33d 0%, #ffc220 55%, #ffb500 100%);
-            color: #231710;
-            border: 3px solid #fff1be;
-            border-radius: 14px;
-            padding: 0.9vh 1.2vw;
+        .topbar {
             display: grid;
             grid-template-columns: 1.2fr 1fr 1fr;
             align-items: center;
-            gap: 1vw;
+            gap: 0.8vw;
+            background: linear-gradient(90deg, #ffcf3f, #ffb72d 55%, #ff9b25);
+            color: #2d1c12;
+            border: 3px solid #ffe89d;
+            border-radius: 14px;
             box-shadow: var(--shadow);
+            padding: 0.8vh 1vw;
         }
 
         .brand {
-            font-size: clamp(1.3rem, 2.8vh, 2.2rem);
+            font-size: clamp(1.25rem, 2.7vh, 2.1rem);
             font-weight: 900;
             letter-spacing: 0.08em;
             text-transform: uppercase;
         }
 
-        .info-chip {
-            font-size: clamp(1rem, 2.2vh, 1.7rem);
-            font-weight: 800;
+        .chip {
             text-align: center;
-            padding: 0.4vh 0.8vw;
+            background: rgba(255, 255, 255, 0.42);
+            border: 2px solid rgba(38, 24, 16, 0.2);
             border-radius: 999px;
-            background: rgba(255, 255, 255, 0.45);
-            border: 2px solid rgba(35, 23, 16, 0.18);
+            padding: 0.35vh 0.6vw;
+            font-size: clamp(0.95rem, 2.05vh, 1.45rem);
+            font-weight: 800;
         }
 
-        .ticker {
-            display: inline-flex;
-            gap: 0.5vw;
-            align-items: center;
-            justify-content: flex-end;
-            font-size: clamp(1rem, 2.2vh, 1.7rem);
+        .phone {
+            text-align: right;
+            font-size: clamp(1rem, 2.1vh, 1.5rem);
             font-weight: 900;
-        }
-
-        .phone-icon {
-            font-size: 1.1em;
-            line-height: 1;
+            letter-spacing: 0.02em;
         }
 
         .slides {
             position: relative;
-            flex: 1;
             min-height: 0;
-            border-radius: 16px;
             overflow: hidden;
+            border-radius: 16px;
         }
 
         .slide {
             position: absolute;
             inset: 0;
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-rows: 20vh 1fr;
             gap: 1.2vh;
-            padding: 0.9vh 0.2vw 0.2vh;
             opacity: 0;
-            transform: scale(0.985);
-            pointer-events: none;
+            transform: translateY(10px) scale(0.985);
             transition: opacity 620ms ease, transform 620ms ease;
+            pointer-events: none;
         }
 
         .slide.active {
             opacity: 1;
-            transform: scale(1);
+            transform: translateY(0) scale(1);
             pointer-events: auto;
         }
 
-        .grid {
-            flex: 1;
+        .hero-row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1vw;
+        }
+
+        .hero-card {
+            position: relative;
+            margin: 0;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 2px solid #6a4332;
+            box-shadow: var(--shadow);
+            background: #241b18;
+        }
+
+        .hero-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(1.07) saturate(1.08);
+        }
+
+        .hero-card figcaption {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 0.7vh 0.7vw;
+            font-size: clamp(0.9rem, 1.55vh, 1.1rem);
+            font-weight: 800;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.76) 45%);
+        }
+
+        .menu-grid {
             min-height: 0;
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -136,97 +159,82 @@
 
         .menu-col {
             min-height: 0;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(0, 0, 0, 0.16));
+            border: 2px solid var(--line);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            padding: 0.65vh 0.65vw 0.7vh;
             display: flex;
             flex-direction: column;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.12));
-            border: 2px solid var(--panel-border);
-            border-radius: 14px;
-            padding: 0.8vh 0.7vw 0.9vh;
-            box-shadow: var(--shadow);
+            gap: 0.42vh;
         }
 
         .section-title {
-            margin: 0 0 0.5vh;
-            background: linear-gradient(90deg, #d82b1f, #be241a);
-            border: 2px solid #ff998f;
-            border-radius: 10px;
-            text-align: center;
-            text-transform: uppercase;
-            font-size: clamp(0.95rem, 1.9vh, 1.55rem);
-            line-height: 1.15;
-            letter-spacing: 0.03em;
-            padding: 0.36vh 0.4vw;
+            margin: 0;
+            font-size: clamp(0.9rem, 1.72vh, 1.25rem);
             font-weight: 900;
+            line-height: 1.2;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            background: linear-gradient(90deg, var(--red), #b91f18);
+            border: 2px solid #ff9b90;
+            border-radius: 10px;
+            padding: 0.32vh 0.42vw;
+            text-align: center;
         }
 
         .items {
-            flex: 1;
             min-height: 0;
+            flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 0.25vh;
+            gap: 0.22vh;
         }
 
         .item {
-            padding: 0.22vh 0.1vw 0.28vh;
             border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+            padding: 0.2vh 0.1vw 0.26vh;
         }
 
         .item-head {
             display: flex;
-            align-items: baseline;
             justify-content: space-between;
             gap: 0.45vw;
+            align-items: baseline;
         }
 
         .name {
-            font-size: clamp(0.86rem, 1.53vh, 1.22rem);
-            line-height: 1.14;
+            font-size: clamp(0.82rem, 1.45vh, 1.06rem);
             font-weight: 800;
-            color: var(--text-main);
+            line-height: 1.16;
         }
 
         .price {
             flex-shrink: 0;
-            background: var(--price-bg);
-            border: 1px solid #5f4b2e;
-            color: var(--brand-yellow);
-            padding: 0.08vh 0.42vw;
             border-radius: 999px;
-            font-size: clamp(0.86rem, 1.58vh, 1.25rem);
+            border: 1px solid #765526;
+            background: linear-gradient(90deg, #3b2a16, #2c2013);
+            color: var(--yellow);
+            padding: 0.06vh 0.42vw;
+            font-size: clamp(0.8rem, 1.38vh, 1.02rem);
             font-weight: 900;
         }
 
         .desc {
-            color: var(--text-soft);
-            font-size: clamp(0.74rem, 1.22vh, 0.98rem);
+            margin-top: 0.06vh;
+            color: var(--soft);
+            font-size: clamp(0.69rem, 1.08vh, 0.84rem);
             line-height: 1.2;
-            margin-top: 0.08vh;
             font-weight: 600;
         }
 
-        .thumb-wrap {
-            margin-top: 0.4vh;
-            padding-top: 0.3vh;
-            text-align: center;
-        }
-
-        .thumb {
-            width: 100%;
-            max-height: 16.2vh;
-            object-fit: cover;
-            border-radius: 10px;
-            border: 2px solid #5d2a2a;
-            filter: saturate(1.03) contrast(1.04);
-        }
-
-        .slide-footer {
+        .footer {
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             gap: 0.65vw;
-            font-size: clamp(0.75rem, 1.2vh, 0.95rem);
-            color: #d3cbc0;
+            color: #c7bbaa;
+            font-size: clamp(0.72rem, 1.12vh, 0.9rem);
             letter-spacing: 0.08em;
             text-transform: uppercase;
             font-weight: 800;
@@ -238,14 +246,13 @@
             min-width: 10px;
             min-height: 10px;
             border-radius: 50%;
-            background: #5a4e43;
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
-            transition: transform 300ms ease, background-color 300ms ease;
+            background: #5b4d45;
+            transition: transform 260ms ease, background-color 260ms ease;
         }
 
         .dot.is-active {
-            transform: scale(1.14);
-            background: var(--brand-yellow);
+            transform: scale(1.16);
+            background: var(--orange);
         }
 
         @media (max-width: 1100px) {
@@ -253,24 +260,25 @@
                 overflow: auto;
             }
 
-            .layout {
+            .wrap {
                 height: auto;
                 min-height: 100%;
+                grid-template-rows: auto auto auto;
                 padding: 10px;
+                gap: 10px;
             }
 
-            .top-bar {
+            .topbar {
                 grid-template-columns: 1fr;
+                text-align: center;
                 gap: 8px;
+            }
+
+            .phone {
                 text-align: center;
             }
 
-            .ticker {
-                justify-content: center;
-            }
-
             .slides {
-                border-radius: 10px;
                 overflow: visible;
             }
 
@@ -280,35 +288,42 @@
                 transform: none;
                 pointer-events: auto;
                 display: none;
-                padding: 4px 0;
+                grid-template-rows: auto auto;
+                gap: 10px;
             }
 
             .slide.active {
-                display: flex;
+                display: grid;
             }
 
-            .grid {
+            .hero-row,
+            .menu-grid {
                 grid-template-columns: 1fr;
                 gap: 10px;
             }
 
-            .thumb {
-                max-height: 170px;
+            .hero-card {
+                height: 180px;
             }
         }
     </style>
 </head>
 <body>
-<div class="layout">
-    <header class="top-bar">
+<div class="wrap">
+    <header class="topbar">
         <div class="brand">Leyla Döner</div>
-        <div class="info-chip">August-Bebel-Platz 2</div>
-        <div class="ticker"><span class="phone-icon">☎</span><span>0176 43573663</span></div>
+        <div class="chip">August-Bebel-Platz 2</div>
+        <div class="phone">☎ 0176 43573663</div>
     </header>
 
     <main class="slides" aria-live="polite">
-        <section class="slide active" id="slide-1">
-            <div class="grid">
+        <section class="slide active">
+            <div class="hero-row">
+                <figure class="hero-card"><img src="doner.png" alt="Döner"><figcaption>Döner Klassiker</figcaption></figure>
+                <figure class="hero-card"><img src="durum.png" alt="Dürüm"><figcaption>Dürüm & Lahmacun</figcaption></figure>
+                <figure class="hero-card"><img src="burger.png" alt="Spezialitäten"><figcaption>Pizza & Spezial</figcaption></figure>
+            </div>
+            <div class="menu-grid">
                 <article class="menu-col">
                     <h2 class="section-title">Kebab & Brot</h2>
                     <div class="items">
@@ -323,7 +338,6 @@
                         <div class="item"><div class="item-head"><span class="name">09. Kebab Teller Fleisch</span><span class="price">15,00 €</span></div><div class="desc">nur mit Fleisch & Soße</div></div>
                         <div class="item"><div class="item-head"><span class="name">10. Schnitzel Brot</span><span class="price">7,00 €</span></div><div class="desc">im Fladenbrot mit Salat & Soße</div></div>
                     </div>
-                    <div class="thumb-wrap"><img class="thumb" src="doner.png" alt="Kebab"></div>
                 </article>
 
                 <article class="menu-col">
@@ -335,21 +349,17 @@
                         <div class="item"><div class="item-head"><span class="name">14. Box Pommes</span><span class="price">7,00 €</span></div><div class="desc">mit Pommes, Salat und Fleisch</div></div>
                         <div class="item"><div class="item-head"><span class="name">15. Box Nudeln</span><span class="price">7,00 €</span></div><div class="desc">mit Nudeln, Salat und Fleisch</div></div>
                         <div class="item"><div class="item-head"><span class="name">16. Box nur Fleisch</span><span class="price">10,00 €</span></div><div class="desc">nur Fleisch & Soße</div></div>
-
-                        <h2 class="section-title">Pizza (28 cm)</h2>
-
-                        <div class="item"><div class="item-head"><span class="name">17. Pizza Leyla</span><span class="price">13,00 €</span></div><div class="desc">mit Dönerfleisch, Zwiebeln, Käse, Kräuter- oder Knoblauchsoße</div></div>
+                        <div class="item"><div class="item-head"><span class="name">17. Pizza Leyla</span><span class="price">13,00 €</span></div><div class="desc">Dönerfleisch, Zwiebeln, Käse, Kräuter- oder Knoblauchsoße</div></div>
                         <div class="item"><div class="item-head"><span class="name">18. Pizza Salami</span><span class="price">12,00 €</span></div><div class="desc">mit Rindersalami & Käse</div></div>
                         <div class="item"><div class="item-head"><span class="name">19. Pizza Margherita</span><span class="price">10,00 €</span></div><div class="desc">Tomatensoße & Käse</div></div>
                     </div>
-                    <div class="thumb-wrap"><img class="thumb" src="durum.png" alt="Dürüm"></div>
                 </article>
 
                 <article class="menu-col">
                     <h2 class="section-title">Pizza & Spezialitäten</h2>
                     <div class="items">
-                        <div class="item"><div class="item-head"><span class="name">20. Pizza Veggie</span><span class="price">13,00 €</span></div><div class="desc">mit Mais, Zwiebeln, Peperoni, Oliven, Tomaten</div></div>
-                        <div class="item"><div class="item-head"><span class="name">21. Pizza Hawaii</span><span class="price">15,00 €</span></div><div class="desc">mit Dönerfleisch, Zwiebeln, Ananas, Käse, Kräuter- oder Knoblauchsoße</div></div>
+                        <div class="item"><div class="item-head"><span class="name">20. Pizza Veggie</span><span class="price">13,00 €</span></div><div class="desc">Mais, Zwiebeln, Peperoni, Oliven, Tomaten</div></div>
+                        <div class="item"><div class="item-head"><span class="name">21. Pizza Hawaii</span><span class="price">15,00 €</span></div><div class="desc">Dönerfleisch, Zwiebeln, Ananas, Käse, Kräuter- oder Knoblauchsoße</div></div>
                         <div class="item"><div class="item-head"><span class="name">22. Pizza Thunfisch</span><span class="price">13,00 €</span></div><div class="desc">Thunfisch & Zwiebeln</div></div>
                         <div class="item"><div class="item-head"><span class="name">23. Schnitzel</span><span class="price">10,00 €</span></div><div class="desc">im Fladenbrot mit 2 Schnitzel</div></div>
                         <div class="item"><div class="item-head"><span class="name">24. Dürüm</span><span class="price">10,00 €</span></div><div class="desc">mit Pommes</div></div>
@@ -357,13 +367,17 @@
                         <div class="item"><div class="item-head"><span class="name">26. Fladenbrot</span><span class="price">2,00 €</span></div><div class="desc">mit Soße</div></div>
                         <div class="item"><div class="item-head"><span class="name">27. Schnitzel Dürüm</span><span class="price">8,00 €</span></div><div class="desc">mit Salat und Soße</div></div>
                     </div>
-                    <div class="thumb-wrap"><img class="thumb" src="burger.png" alt="Spezialitäten"></div>
                 </article>
             </div>
         </section>
 
-        <section class="slide" id="slide-2">
-            <div class="grid">
+        <section class="slide">
+            <div class="hero-row">
+                <figure class="hero-card"><img src="nuggets.png" alt="Nuggets"><figcaption>Burger & Nuggets</figcaption></figure>
+                <figure class="hero-card"><img src="pommes.png" alt="Pommes"><figcaption>Vegetarisch</figcaption></figure>
+                <figure class="hero-card"><img src="salat.png" alt="Salat"><figcaption>Frische Salate</figcaption></figure>
+            </div>
+            <div class="menu-grid">
                 <article class="menu-col">
                     <h2 class="section-title">Burger, Nuggets, Schnitzel</h2>
                     <div class="items">
@@ -376,7 +390,6 @@
                         <div class="item"><div class="item-head"><span class="name">34. Nuggets 9er</span><span class="price">10,00 €</span></div><div class="desc">mit Pommes</div></div>
                         <div class="item"><div class="item-head"><span class="name">35. Nuggets 12er</span><span class="price">12,00 €</span></div><div class="desc">mit Pommes</div></div>
                     </div>
-                    <div class="thumb-wrap"><img class="thumb" src="nuggets.png" alt="Nuggets"></div>
                 </article>
 
                 <article class="menu-col">
@@ -392,7 +405,6 @@
                         <div class="item"><div class="item-head"><span class="name">43. Pommes Frites klein</span><span class="price">4,00 €</span></div><div class="desc">Mayo oder Ketchup</div></div>
                         <div class="item"><div class="item-head"><span class="name">44. Pommes Frites groß</span><span class="price">5,00 €</span></div><div class="desc">Mayo oder Ketchup</div></div>
                     </div>
-                    <div class="thumb-wrap"><img class="thumb" src="pommes.png" alt="Pommes"></div>
                 </article>
 
                 <article class="menu-col">
@@ -409,15 +421,14 @@
                         <div class="item"><div class="item-head"><span class="name">53. Kreta</span><span class="price">7,00 €</span></div><div class="desc">mit Eisberg, Tomaten, Gurken, Zwiebeln, Oliven, Peperoni & Käse</div></div>
                         <div class="item"><div class="item-head"><span class="name">54. Salat Leyla</span><span class="price">7,00 €</span></div><div class="desc">mit Eisberg, Tomaten, Gurken, Zwiebeln, Oliven, Peperoni, Paprika, Mais & Käse</div></div>
                     </div>
-                    <div class="thumb-wrap"><img class="thumb" src="salat.png" alt="Salate"></div>
                 </article>
             </div>
         </section>
     </main>
 
-    <footer class="slide-footer">
-        <span class="dot is-active" data-dot="0"></span>
-        <span class="dot" data-dot="1"></span>
+    <footer class="footer">
+        <span class="dot is-active"></span>
+        <span class="dot"></span>
     </footer>
 </div>
 
@@ -427,7 +438,7 @@
     const slideDurationMs = 22000;
     let currentIndex = 0;
 
-    function setActiveSlide(index) {
+    function setSlide(index) {
         slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
         dots.forEach((dot, i) => dot.classList.toggle('is-active', i === index));
         currentIndex = index;
@@ -435,7 +446,7 @@
 
     function nextSlide() {
         const next = (currentIndex + 1) % slides.length;
-        setActiveSlide(next);
+        setSlide(next);
     }
 
     setInterval(nextSlide, slideDurationMs);
