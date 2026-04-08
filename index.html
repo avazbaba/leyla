@@ -3,453 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leyla Döner - TV Menu</title>
+    <title>Leyla Döner - Digital Menu Board</title>
     <style>
         :root {
-            --bg: #0d0d0d;
-            --panel: #161414;
-            --panel-2: #1f1b1a;
-            --line: #3a2b25;
-            --yellow: #ffd447;
-            --orange: #ff9e2c;
-            --red: #d93527;
-            --white: #fff8ed;
-            --soft: #d2c5b5;
-            --shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+            --primary-yellow: #ffcc00;
+            --accent-red: #e62e00;
+            --bg-dark: #000000;
+            --text-white: #ffffff;
+            --transition-speed: 1s;
         }
 
-        * {
-            box-sizing: border-box;
-        }
-
-        html, body {
-            margin: 0;
-            width: 100%;
-            height: 100%;
+        body, html {
+            margin: 0; padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            font-family: 'Arial Black', Gadget, sans-serif;
+            height: 100vh; width: 100vw;
             overflow: hidden;
-            font-family: "Segoe UI", "Trebuchet MS", Arial, sans-serif;
-            color: var(--white);
-            background:
-                radial-gradient(120% 130% at 100% 0%, #311d15 0%, #171212 45%, #0d0d0d 100%);
         }
 
-        body::before {
-            content: "";
+        .background {
             position: fixed;
-            inset: 0;
-            background:
-                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 2px, transparent 2px 24px),
-                linear-gradient(125deg, rgba(255, 164, 51, 0.08), transparent 35%);
-            pointer-events: none;
-            z-index: -2;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, #222 0%, #000 100%);
+            z-index: -1;
         }
 
-        .wrap {
-            height: 100%;
-            display: grid;
-            grid-template-rows: auto 1fr auto;
-            gap: 1.1vh;
-            padding: 1.2vh 1.2vw 1.2vh;
-        }
-
-        .topbar {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr 1fr;
+        .top-info-bar {
+            background: var(--primary-yellow);
+            color: black;
+            display: flex;
+            margin-top: 2vh;
+            justify-content: space-around;
             align-items: center;
-            gap: 0.8vw;
-            background: linear-gradient(90deg, #ffcf3f, #ffb72d 55%, #ff9b25);
-            color: #2d1c12;
-            border: 3px solid #ffe89d;
-            border-radius: 14px;
-            box-shadow: var(--shadow);
-            padding: 0.8vh 1vw;
-        }
-
-        .brand {
-            font-size: clamp(1.25rem, 2.7vh, 2.1rem);
-            font-weight: 900;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-        .chip {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.42);
-            border: 2px solid rgba(38, 24, 16, 0.2);
-            border-radius: 999px;
-            padding: 0.35vh 0.6vw;
-            font-size: clamp(0.95rem, 2.05vh, 1.45rem);
-            font-weight: 800;
-        }
-
-        .phone {
-            text-align: right;
-            font-size: clamp(1rem, 2.1vh, 1.5rem);
-            font-weight: 900;
-            letter-spacing: 0.02em;
-        }
-
-        .slides {
-            position: relative;
-            min-height: 0;
-            overflow: hidden;
-            border-radius: 16px;
+            font-size: 3.5vh; /* Responsive font based on height */
+            font-weight: bold;
+            border-bottom: 0.6vh solid var(--accent-red);
         }
 
         .slide {
-            position: absolute;
-            inset: 0;
-            display: grid;
-            grid-template-rows: 20vh 1fr;
-            gap: 1.2vh;
-            opacity: 0;
-            transform: translateY(10px) scale(0.985);
-            transition: opacity 620ms ease, transform 620ms ease;
-            pointer-events: none;
+            display: none;
+            padding: 1.5vh 2vw;
+            height: 90vh;
+            box-sizing: border-box;
+            animation: fadeIn var(--transition-speed);
         }
 
-        .slide.active {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            pointer-events: auto;
-        }
+        .active { display: flex; flex-direction: column; }
 
-        .hero-row {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 1vw;
-        }
-
-        .hero-card {
-            position: relative;
-            margin: 0;
-            border-radius: 14px;
-            overflow: hidden;
-            border: 2px solid #6a4332;
-            box-shadow: var(--shadow);
-            background: #241b18;
-        }
-
-        .hero-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: contrast(1.07) saturate(1.08);
-        }
-
-        .hero-card figcaption {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            padding: 0.7vh 0.7vw;
-            font-size: clamp(0.9rem, 1.55vh, 1.1rem);
-            font-weight: 800;
-            letter-spacing: 0.03em;
-            text-transform: uppercase;
-            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.76) 45%);
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .menu-grid {
-            min-height: 0;
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 1vw;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2vw;
+            height: 100%;
         }
 
-        .menu-col {
-            min-height: 0;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(0, 0, 0, 0.16));
-            border: 2px solid var(--line);
-            border-radius: 14px;
-            box-shadow: var(--shadow);
-            padding: 0.65vh 0.65vw 0.7vh;
-            display: flex;
-            flex-direction: column;
-            gap: 0.42vh;
-        }
+        .col { display: flex; flex-direction: column; height: 100%; }
 
-        .section-title {
-            margin: 0;
-            font-size: clamp(0.9rem, 1.72vh, 1.25rem);
-            font-weight: 900;
-            line-height: 1.2;
+        h2 {
+            background: var(--accent-red);
+            padding: 0.5vh;
+            font-size: 2.4vh;
+            margin: 0.5vh 0;
+            border-radius: 5px;
             text-transform: uppercase;
-            letter-spacing: 0.03em;
-            background: linear-gradient(90deg, var(--red), #b91f18);
-            border: 2px solid #ff9b90;
-            border-radius: 10px;
-            padding: 0.32vh 0.42vw;
             text-align: center;
         }
 
-        .items {
-            min-height: 0;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 0.22vh;
+        .item-container {
+            margin-bottom: 0.4vh;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.2vh;
         }
 
         .item {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.09);
-            padding: 0.2vh 0.1vw 0.26vh;
-        }
-
-        .item-head {
             display: flex;
             justify-content: space-between;
-            gap: 0.45vw;
             align-items: baseline;
         }
 
-        .name {
-            font-size: clamp(0.82rem, 1.45vh, 1.06rem);
-            font-weight: 800;
-            line-height: 1.16;
+        .item-name { font-size: 2vh; line-height: 1.1; }
+        .price { color: var(--primary-yellow); font-weight: bold; font-size: 2.2vh; white-space: nowrap; padding-left: 10px; }
+        
+        .description {
+            font-size: 1.4vh;
+            color: #bbb;
+            font-family: Arial, sans-serif;
+            margin-top: -2px;
+            font-weight: normal;
+            line-height: 1.1;
         }
 
-        .price {
-            flex-shrink: 0;
-            border-radius: 999px;
-            border: 1px solid #765526;
-            background: linear-gradient(90deg, #3b2a16, #2c2013);
-            color: var(--yellow);
-            padding: 0.06vh 0.42vw;
-            font-size: clamp(0.8rem, 1.38vh, 1.02rem);
-            font-weight: 900;
+        .img-box {
+            margin-top: auto; /* Pushes image to the bottom */
+            text-align: center;
+            padding-top: 1vh;
+        }
+        
+        .img-box img {
+            max-height: 20vh; /* Limits image height so text can fit */
+            width: auto;
+            border-radius: 10px;
+            border: 2px solid #333;
         }
 
-        .desc {
-            margin-top: 0.06vh;
-            color: var(--soft);
-            font-size: clamp(0.69rem, 1.08vh, 0.84rem);
-            line-height: 1.2;
-            font-weight: 600;
-        }
-
-        .footer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.65vw;
-            color: #c7bbaa;
-            font-size: clamp(0.72rem, 1.12vh, 0.9rem);
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            font-weight: 800;
-        }
-
-        .dot {
-            width: 0.9vh;
-            height: 0.9vh;
-            min-width: 10px;
-            min-height: 10px;
-            border-radius: 50%;
-            background: #5b4d45;
-            transition: transform 260ms ease, background-color 260ms ease;
-        }
-
-        .dot.is-active {
-            transform: scale(1.16);
-            background: var(--orange);
-        }
-
-        @media (max-width: 1100px) {
-            html, body {
-                overflow: auto;
-            }
-
-            .wrap {
-                height: auto;
-                min-height: 100%;
-                grid-template-rows: auto auto auto;
-                padding: 10px;
-                gap: 10px;
-            }
-
-            .topbar {
-                grid-template-columns: 1fr;
-                text-align: center;
-                gap: 8px;
-            }
-
-            .phone {
-                text-align: center;
-            }
-
-            .slides {
-                overflow: visible;
-            }
-
-            .slide {
-                position: static;
-                opacity: 1;
-                transform: none;
-                pointer-events: auto;
-                display: none;
-                grid-template-rows: auto auto;
-                gap: 10px;
-            }
-
-            .slide.active {
-                display: grid;
-            }
-
-            .hero-row,
-            .menu-grid {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-
-            .hero-card {
-                height: 180px;
-            }
-        }
+        .highlight { color: var(--accent-red); }
     </style>
 </head>
 <body>
-<div class="wrap">
-    <header class="topbar">
-        <div class="brand">Leyla Döner</div>
-        <div class="chip">August-Bebel-Platz 2</div>
-        <div class="phone">☎ 0176 43573663</div>
-    </header>
 
-    <main class="slides" aria-live="polite">
-        <section class="slide active">
-            <div class="hero-row">
-                <figure class="hero-card"><img src="doner.png" alt="Döner"><figcaption>Döner Klassiker</figcaption></figure>
-                <figure class="hero-card"><img src="durum.png" alt="Dürüm"><figcaption>Dürüm & Lahmacun</figcaption></figure>
-                <figure class="hero-card"><img src="burger.png" alt="Spezialitäten"><figcaption>Pizza & Spezial</figcaption></figure>
-            </div>
-            <div class="menu-grid">
-                <article class="menu-col">
-                    <h2 class="section-title">Kebab & Brot</h2>
-                    <div class="items">
-                        <div class="item"><div class="item-head"><span class="name">01. Kebab</span><span class="price">7,00 €</span></div><div class="desc">im Fladenbrot mit Salat & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">02. Super Kebab XXL</span><span class="price">8,00 €</span></div><div class="desc">mit extra Fleisch & Salat</div></div>
-                        <div class="item"><div class="item-head"><span class="name">03. Kebab Halloumi</span><span class="price">8,50 €</span></div><div class="desc">mit Halloumi, Salat & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">04. Kebab Käse</span><span class="price">8,00 €</span></div><div class="desc">mit Weichkäse & Salat</div></div>
-                        <div class="item"><div class="item-head"><span class="name">05. Hawaii Kebab</span><span class="price">8,00 €</span></div><div class="desc">mit Ananas, Salat & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">06. Kebab Teller Brot</span><span class="price">12,00 €</span></div><div class="desc">mit Fladenbrot, Salat & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">07. Kebab Teller Pommes</span><span class="price">12,00 €</span></div><div class="desc">mit Pommes, Salat & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">08. Kebab Teller Nudeln</span><span class="price">12,00 €</span></div><div class="desc">mit Nudeln, Salat & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">09. Kebab Teller Fleisch</span><span class="price">15,00 €</span></div><div class="desc">nur mit Fleisch & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">10. Schnitzel Brot</span><span class="price">7,00 €</span></div><div class="desc">im Fladenbrot mit Salat & Soße</div></div>
-                    </div>
-                </article>
+<div class="background"></div>
 
-                <article class="menu-col">
-                    <h2 class="section-title">Dürüm & Box</h2>
-                    <div class="items">
-                        <div class="item"><div class="item-head"><span class="name">11. Dürüm Kebab</span><span class="price">8,00 €</span></div><div class="desc">Teigrolle mit Fleisch, Salat & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">12. Lahmacun Fleisch</span><span class="price">9,00 €</span></div><div class="desc">Türkische Pizza mit Fleisch, Salat & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">13. Lahmacun Salat</span><span class="price">6,00 €</span></div><div class="desc">Türkische Pizza mit Salat & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">14. Box Pommes</span><span class="price">7,00 €</span></div><div class="desc">mit Pommes, Salat und Fleisch</div></div>
-                        <div class="item"><div class="item-head"><span class="name">15. Box Nudeln</span><span class="price">7,00 €</span></div><div class="desc">mit Nudeln, Salat und Fleisch</div></div>
-                        <div class="item"><div class="item-head"><span class="name">16. Box nur Fleisch</span><span class="price">10,00 €</span></div><div class="desc">nur Fleisch & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">17. Pizza Leyla</span><span class="price">13,00 €</span></div><div class="desc">Dönerfleisch, Zwiebeln, Käse, Kräuter- oder Knoblauchsoße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">18. Pizza Salami</span><span class="price">12,00 €</span></div><div class="desc">mit Rindersalami & Käse</div></div>
-                        <div class="item"><div class="item-head"><span class="name">19. Pizza Margherita</span><span class="price">10,00 €</span></div><div class="desc">Tomatensoße & Käse</div></div>
-                    </div>
-                </article>
+<div class="top-info-bar">
+    <span>LEYLA DÖNER</span>
+    <span>August-Bebel-Platz 2</span>
+    <!-- <span class="highlight">DÖNER ANGEBOT: 6,00 €</span> -->
+    <span>📞 0176 43573663</span>
+</div>
 
-                <article class="menu-col">
-                    <h2 class="section-title">Pizza & Spezialitäten</h2>
-                    <div class="items">
-                        <div class="item"><div class="item-head"><span class="name">20. Pizza Veggie</span><span class="price">13,00 €</span></div><div class="desc">Mais, Zwiebeln, Peperoni, Oliven, Tomaten</div></div>
-                        <div class="item"><div class="item-head"><span class="name">21. Pizza Hawaii</span><span class="price">15,00 €</span></div><div class="desc">Dönerfleisch, Zwiebeln, Ananas, Käse, Kräuter- oder Knoblauchsoße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">22. Pizza Thunfisch</span><span class="price">13,00 €</span></div><div class="desc">Thunfisch & Zwiebeln</div></div>
-                        <div class="item"><div class="item-head"><span class="name">23. Schnitzel</span><span class="price">10,00 €</span></div><div class="desc">im Fladenbrot mit 2 Schnitzel</div></div>
-                        <div class="item"><div class="item-head"><span class="name">24. Dürüm</span><span class="price">10,00 €</span></div><div class="desc">mit Pommes</div></div>
-                        <div class="item"><div class="item-head"><span class="name">25. Chicken Wrap</span><span class="price">8,00 €</span></div><div class="desc">mit Nuggets, Salat und Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">26. Fladenbrot</span><span class="price">2,00 €</span></div><div class="desc">mit Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">27. Schnitzel Dürüm</span><span class="price">8,00 €</span></div><div class="desc">mit Salat und Soße</div></div>
-                    </div>
-                </article>
-            </div>
-        </section>
+<div id="slide1" class="slide">
+    <div class="menu-grid">
+        <div class="col">
+            <h2>Kebab & Brot</h2>
+            <div class="item-container"><div class="item"><span>01. Kebab</span><span class="price">7,00</span></div><div class="description">im Fladenbrot mit Salat & Soße</div></div>
+            <div class="item-container"><div class="item"><span>02. Super Kebab XXL</span><span class="price">8,00</span></div><div class="description">mit extra Fleisch & Salat</div></div>
+            <div class="item-container"><div class="item"><span>03. Kebab Halloumi</span><span class="price">8,50</span></div><div class="description">mit Halloumikäse, Salat & Soße</div></div>
+            <div class="item-container"><div class="item"><span>04. Kebab Käse</span><span class="price">8,00</span></div><div class="description">mit Weichkäse & Salat</div></div>
+            <div class="item-container"><div class="item"><span>05. Hawaii Kebab</span><span class="price">8,00</span></div><div class="description">mit Ananas, Salat & Soße</div></div>
+            <div class="item-container"><div class="item"><span>06. Kebab Teller Brot</span><span class="price">12,00</span></div><div class="description">mit Fladenbrot, Salat & Soße</div></div>
+            <div class="item-container"><div class="item"><span>07. Kebab Teller Pommes</span><span class="price">12,00</span></div><div class="description">mit Pommes, Salat & Soße</div></div>
+            <div class="item-container"><div class="item"><span>08. Kebab Teller Nudeln</span><span class="price">12,00</span></div><div class="description">mit Nudeln, Salat & Soße</div></div>
+            <div class="item-container"><div class="item"><span>09. Kebab Teller Fleisch</span><span class="price">15,00</span></div><div class="description">nur mit Fleisch & Soße</div></div>
+            <div class="item-container"><div class="item"><span>10. Schnitzel Brot</span><span class="price">7,00</span></div><div class="description">im Fladenbrot mit Salat & Soße</div></div>
+            <div class="img-box"><img src="doner.png" alt="Kebab"></div>  
+        </div>
+        
+        <div class="col">
+            <h2>Dürüm & Box</h2>
+            <div class="item-container"><div class="item"><span>11. Dürüm Kebab</span><span class="price">8,00</span></div><div class="description">Teigrolle mit Fleisch, Salat & Soße</div></div>
+            <div class="item-container"><div class="item"><span>12. Lahmacun Fleisch</span><span class="price">9,00</span></div><div class="description">Türkische Pizza mit Fleisch, Salat & Soße</div></div>
+            <div class="item-container"><div class="item"><span>13. Lahmacun Salat</span><span class="price">6,00</span></div><div class="description">Türkische Pizza mit Salat & Soße</div></div>
+            <div class="item-container"><div class="item"><span>14. Box Pommes</span><span class="price">7,00</span></div><div class="description">mit Pommes, Salat und Fleisch</div></div>
+            <div class="item-container"><div class="item"><span>15. Box Nudeln</span><span class="price">7,00</span></div><div class="description">mit Nudeln, Salat und Fleisch</div></div>
+            <div class="item-container"><div class="item"><span>16. Box nur Fleisch</span><span class="price">10,00</span></div><div class="description">nur Fleisch & Soße</div></div>
+            <h2>Pizza (28cm)</h2>
+            <div class="item-container"><div class="item"><span>17. Pizza Leyla</span><span class="price">13,00</span></div><div class="description">mit Dönerfleisch, Zwiebeln, Käse, Kräuter- oder Knoblauchsoße</div></div>
+            <div class="item-container"><div class="item"><span>18. Pizza Salami</span><span class="price">12,00</span></div><div class="description">mit Rindersalami & Käse</div></div>
+            <div class="item-container"><div class="item"><span>19. Pizza Margherita</span><span class="price">10,00</span></div><div class="description">Tomatensoße & Käse</div></div>
+            <div class="img-box"><img src="durum.png" alt="Dürüm"></div>  
+        </div>
 
-        <section class="slide">
-            <div class="hero-row">
-                <figure class="hero-card"><img src="nuggets.png" alt="Nuggets"><figcaption>Burger & Nuggets</figcaption></figure>
-                <figure class="hero-card"><img src="pommes.png" alt="Pommes"><figcaption>Vegetarisch</figcaption></figure>
-                <figure class="hero-card"><img src="salat.png" alt="Salat"><figcaption>Frische Salate</figcaption></figure>
-            </div>
-            <div class="menu-grid">
-                <article class="menu-col">
-                    <h2 class="section-title">Burger, Nuggets, Schnitzel</h2>
-                    <div class="items">
-                        <div class="item"><div class="item-head"><span class="name">28. Hamburger</span><span class="price">6,00 €</span></div></div>
-                        <div class="item"><div class="item-head"><span class="name">29. Cheeseburger</span><span class="price">7,00 €</span></div></div>
-                        <div class="item"><div class="item-head"><span class="name">30. Chickenburger</span><span class="price">6,00 €</span></div></div>
-                        <div class="item"><div class="item-head"><span class="name">31. Doppel Hamburger</span><span class="price">8,00 €</span></div></div>
-                        <div class="item"><div class="item-head"><span class="name">32. Schnitzel Teller</span><span class="price">13,00 €</span></div><div class="desc">mit Pommes, Salat & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">33. Nuggets 6er</span><span class="price">8,00 €</span></div><div class="desc">mit Pommes</div></div>
-                        <div class="item"><div class="item-head"><span class="name">34. Nuggets 9er</span><span class="price">10,00 €</span></div><div class="desc">mit Pommes</div></div>
-                        <div class="item"><div class="item-head"><span class="name">35. Nuggets 12er</span><span class="price">12,00 €</span></div><div class="desc">mit Pommes</div></div>
-                    </div>
-                </article>
+        <div class="col">
+            <h2>Pizza & Spezialitäten</h2>
+            <div class="item-container"><div class="item"><span>20. Pizza Veggie</span><span class="price">13,00</span></div><div class="description">mit Mais, Zwiebeln, Peperoni, Oliven, Tomaten</div></div>
+            <div class="item-container"><div class="item"><span>21. Pizza Hawaii</span><span class="price">15,00</span></div><div class="description">mit Dönerfleisch, Zwiebeln, Ananas, Käse, Kräuter- oder Knoblauchsoße</div></div>
+            <div class="item-container"><div class="item"><span>22. Pizza Thunfisch</span><span class="price">13,00</span></div><div class="description">Thunfisch & Zwiebeln</div></div>
+            <div class="item-container"><div class="item"><span>23. Schnitzel</span><span class="price">10,00</span></div><div class="description">im Fladenbrot mit 2 Schnitzel</div></div>
+            <div class="item-container"><div class="item"><span>24. Dürüm</span><span class="price">10,00</span></div><div class="description">mit Pommes</div></div>
+            <div class="item-container"><div class="item"><span>25. Chicken Wrap</span><span class="price">8,00</span></div><div class="description">mit Nuggets, Salat und Soße</div></div>
+            <div class="item-container"><div class="item"><span>26. Fladenbrot</span><span class="price">2,00</span></div><div class="description">mit Soße</div></div>
+            <div class="item-container"><div class="item"><span>27. Schnitzel Dürüm</span><span class="price">8,00</span></div><div class="description">mit Salat und Soße</div></div>
+            <div class="img-box"><img src="burger.png" alt="Burger"></div>  
+        </div>
+    </div>
+</div>
 
-                <article class="menu-col">
-                    <h2 class="section-title">Vegetarisch</h2>
-                    <div class="items">
-                        <div class="item"><div class="item-head"><span class="name">36. Vegetarischer Döner</span><span class="price">6,00 €</span></div><div class="desc">im Fladenbrot mit Salat & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">37. Vegetarischer Dürüm</span><span class="price">7,00 €</span></div><div class="desc">mit Salat & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">38. Vegetarischer Dürüm Halloumi</span><span class="price">8,00 €</span></div><div class="desc">mit Halloumi, Salat & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">39. Falafel Dürüm</span><span class="price">8,00 €</span></div><div class="desc">mit Falafel, Salat & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">40. Falafel</span><span class="price">7,00 €</span></div><div class="desc">im Fladenbrot mit Salat & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">41. Halloumi Döner</span><span class="price">7,00 €</span></div><div class="desc">im Fladenbrot mit Halloumi, Salat & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">42. Vegetarischer Teller</span><span class="price">13,00 €</span></div><div class="desc">mit Falafel, Halloumi, Pommes oder Nudeln, Salat & Soße</div></div>
-                        <div class="item"><div class="item-head"><span class="name">43. Pommes Frites klein</span><span class="price">4,00 €</span></div><div class="desc">Mayo oder Ketchup</div></div>
-                        <div class="item"><div class="item-head"><span class="name">44. Pommes Frites groß</span><span class="price">5,00 €</span></div><div class="desc">Mayo oder Ketchup</div></div>
-                    </div>
-                </article>
+<div id="slide2" class="slide active">
+    <div class="menu-grid">
+        <div class="col">
+            <h2>Burger Nuggets Schnitzel</h2>
+                <div class="item-container"><div class="item"><span>28. Hamburger</span><span class="price">6,00</span></div></div>
+                <div class="item-container"><div class="item"><span>29. Cheeseburger</span><span class="price">7,00</span></div></div>
+                <div class="item-container"><div class="item"><span>30. Chickenburger</span><span class="price">6,00</span></div></div>
+                <div class="item-container"><div class="item"><span>31. Doppel Hamburger</span><span class="price">8,00</span></div></div>
+                <div class="item-container"><div class="item"><span>32. Schnitzel Teller</span><span class="price">13,00</span></div><div class="description">mit Pommes, Salat & Soße</div></div>
+                <div class="item-container"><div class="item"><span>33. Nuggets 6er</span><span class="price">8,00</span></div><div class="description">mit Pommes</div></div>
+                <div class="item-container"><div class="item"><span>34. Nuggets 9er</span><span class="price">10,00</span></div><div class="description">mit Pommes</div></div>
+                <div class="item-container"><div class="item"><span>35. Nuggets 12er</span><span class="price">12,00</span></div><div class="description">mit Pommes</div></div>
+                <div class="img-box"><img src="nuggets.png" alt="Nuggets"></div>  
+        </div>
 
-                <article class="menu-col">
-                    <h2 class="section-title">Salate</h2>
-                    <div class="items">
-                        <div class="item"><div class="item-head"><span class="name">45. Chef Salat</span><span class="price">8,00 €</span></div><div class="desc">mit Eisberg, Tomaten, Gurken, Ei & Schinken</div></div>
-                        <div class="item"><div class="item-head"><span class="name">46. Italia</span><span class="price">8,00 €</span></div><div class="desc">mit Eisberg, Tomaten, Gurken, Zwiebeln, Thunfisch & Käse</div></div>
-                        <div class="item"><div class="item-head"><span class="name">47. City</span><span class="price">8,00 €</span></div><div class="desc">mit Eisberg, Tomaten, Gurken, Dönerfleisch & Käse</div></div>
-                        <div class="item"><div class="item-head"><span class="name">48. Caprese</span><span class="price">8,00 €</span></div><div class="desc">mit Tomaten, Mozzarella & frischem Basilikum</div></div>
-                        <div class="item"><div class="item-head"><span class="name">49. Pomodore</span><span class="price">8,00 €</span></div><div class="desc">mit Eisberg, Paprika, Zwiebeln, Schinken, Ananas, Mais & Ei</div></div>
-                        <div class="item"><div class="item-head"><span class="name">50. Conomore</span><span class="price">7,00 €</span></div><div class="desc">mit Eisberg, Peperoni, Zwiebeln, Oliven & roten Bohnen</div></div>
-                        <div class="item"><div class="item-head"><span class="name">51. Insalata Mista</span><span class="price">9,00 €</span></div><div class="desc">mit Eisberg, Tomate, Gurke, Ananas, Halloumi & Dönerfleisch</div></div>
-                        <div class="item"><div class="item-head"><span class="name">52. Krautsalat</span><span class="price">7,00 €</span></div><div class="desc">Rot- und Weißkraut, Zwiebeln & Mais</div></div>
-                        <div class="item"><div class="item-head"><span class="name">53. Kreta</span><span class="price">7,00 €</span></div><div class="desc">mit Eisberg, Tomaten, Gurken, Zwiebeln, Oliven, Peperoni & Käse</div></div>
-                        <div class="item"><div class="item-head"><span class="name">54. Salat Leyla</span><span class="price">7,00 €</span></div><div class="desc">mit Eisberg, Tomaten, Gurken, Zwiebeln, Oliven, Peperoni, Paprika, Mais & Käse</div></div>
-                    </div>
-                </article>
-            </div>
-        </section>
-    </main>
+        <div class="col">
+            <h2>Vegetarisch</h2>
+            <div class="item-container"><div class="item"><span>36. Vegetarischer Döner</span><span class="price">6,00</span></div><div class="description">im Fladenbrot mit Salat & Soße</div></div>
+            <div class="item-container"><div class="item"><span>37. Vegetarischer Dürüm</span><span class="price">7,00</span></div><div class="description">mit Salat & Soße</div></div>
+            <div class="item-container"><div class="item"><span>38. Vegetarischer Dürüm</span><span class="price">8,00</span></div><div class="description">mit Halloumi, Salat & Soße</div></div>
+            <div class="item-container"><div class="item"><span>39. Falafel Dürüm</span><span class="price">8,00</span></div><div class="description">mit Falafel, Salat & Soße</div></div>
+            <div class="item-container"><div class="item"><span>40. Falafel</span><span class="price">7,00</span></div><div class="description">im Fladenbrot mit Salat & Soße</div></div>
+            <div class="item-container"><div class="item"><span>41. Halloumi Döner</span><span class="price">7,00</span></div><div class="description">im Fladenbrot mit Halloumi, Salat & Soße</div></div>
+            <div class="item-container"><div class="item"><span>42. Vegetarischer Teller</span><span class="price">13,00</span></div><div class="description">mit Falafel, Halloumi, Pommes oder Nudeln, Salat & Soße</div></div>
+            <div class="item-container"><div class="item"><span>43. Pommes Frites klein</span><span class="price">4,00</span></div><div class="description">Mayo oder Ketchup</div></div>
+            <div class="item-container"><div class="item"><span>44. Pommes Frites groß</span><span class="price">5,00</span></div><div class="description">Mayo oder Ketchup</div></div>
+            <div class="img-box"><img src="pommes.png" alt="Pommes"></div>  
+        </div>
 
-    <footer class="footer">
-        <span class="dot is-active"></span>
-        <span class="dot"></span>
-    </footer>
+        <div class="col">
+            <h2>Salate</h2>
+                <div class="item-container"><div class="item"><span>45. Chef Salat</span><span class="price">8,00</span></div><div class="description">mit Eisberg, Tomaten, Gurken, Ei & Schinken</div></div>
+                <div class="item-container"><div class="item"><span>46. Italia</span><span class="price">8,00</span></div><div class="description">mit Eisberg, Tomaten, Gurken, Zwiebeln, Thunfisch & Käse</div></div>
+                <div class="item-container"><div class="item"><span>47. City</span><span class="price">8,00</span></div><div class="description">mit Eisberg, Tomaten, Gurken, Dönerfleisch & Käse</div></div>
+                <div class="item-container"><div class="item"><span>48. Caprese</span><span class="price">8,00</span></div><div class="description">mit Tomaten, Mozzarella & frische Basilikum</div></div>
+                <div class="item-container"><div class="item"><span>49. Pomodore</span><span class="price">8,00</span></div><div class="description">mit Eisberg, Paprika, Zwiebeln, Schinken, Ananas, Mais & Ei</div></div>
+                <div class="item-container"><div class="item"><span>50. Conomore</span><span class="price">7,00</span></div><div class="description">mit Eisberg, Peperoni, Zwiebeln, Oliven & rote Bohnen</div></div>
+                <div class="item-container"><div class="item"><span>51. Insalata Mista</span><span class="price">9,00</span></div><div class="description">mit Eisberg, Tomate, Gurke, Ananas, Halloumi & Dönerfleisch</div></div>
+                <div class="item-container"><div class="item"><span>52. Krautsalat</span><span class="price">7,00</span></div><div class="description">Rot- und Weißkraut, Zwiebeln & Mais</div></div>
+                <div class="item-container"><div class="item"><span>53. Kreta</span><span class="price">7,00</span></div><div class="description">mit Eisberg, Tomaten, Gurken, Zwiebeln, Oliven, Peperoni & Käse</div></div>
+                <div class="item-container"><div class="item"><span>54. Salat Leyla</span><span class="price">7,00</span></div><div class="description">mit Eisberg, Tomaten, Gurken, Zwiebeln, Oliven, Peperoni, Paprika, Mais & Käse</div></div>
+
+            <div class="img-box"><img src="salat.png" alt="Salat"></div>  
+        </div>
+    </div>
 </div>
 
 <script>
-    const slides = Array.from(document.querySelectorAll('.slide'));
-    const dots = Array.from(document.querySelectorAll('.dot'));
-    const slideDurationMs = 22000;
-    let currentIndex = 0;
-
-    function setSlide(index) {
-        slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
-        dots.forEach((dot, i) => dot.classList.toggle('is-active', i === index));
-        currentIndex = index;
+    function showSlides() {
+        const s1 = document.getElementById('slide1');
+        const s2 = document.getElementById('slide2');
+        if(s1.classList.contains('active')){
+            s1.classList.remove('active');
+            s1.style.display = 'none';
+            s2.classList.add('active');
+            s2.style.display = 'flex';
+        } else {
+            s2.classList.remove('active');
+            s2.style.display = 'none';
+            s1.classList.add('active');
+            s1.style.display = 'flex';
+        }
     }
-
-    function nextSlide() {
-        const next = (currentIndex + 1) % slides.length;
-        setSlide(next);
-    }
-
-    setInterval(nextSlide, slideDurationMs);
+    setInterval(showSlides, 25000);
 </script>
+
 </body>
-</html>
+</html><!DOCTYPE html>
