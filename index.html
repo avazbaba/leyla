@@ -60,7 +60,7 @@
             background: var(--primary-yellow);
             color: #000000;
             border-bottom: 0.6vh solid var(--accent-red);
-            font-size: 4vh;
+            font-size: min(3.3vh, 1.85vw);
             font-weight: bold;
             line-height: 1;
             white-space: nowrap;
@@ -115,12 +115,12 @@
          */
         h2 {
             flex: 0 0 auto;
-            margin: 0.5vh 0;
-            padding: 0.5vh;
+            margin: 0.35vh 0;
+            padding: 0.4vh;
             border-radius: 5px;
             background: var(--accent-red);
             color: var(--text-white);
-            font-size: 3.6vh;
+            font-size: min(3vh, 1.68vw);
             line-height: 1.1;
             text-align: center;
             text-transform: uppercase;
@@ -131,8 +131,8 @@
          */
         .item-container {
             flex: 0 0 auto;
-            margin-bottom: 0.4vh;
-            padding-bottom: 0.2vh;
+            margin-bottom: 0.25vh;
+            padding-bottom: 0.15vh;
             border-bottom: 1px solid var(--border-color);
         }
 
@@ -146,7 +146,7 @@
         .item-name {
             min-width: 0;
             font-family: Arial, sans-serif;
-            font-size: 3.6vh;
+            font-size: min(3.2vh, 1.8vw);
             font-weight: 800;
             line-height: 1.1;
         }
@@ -156,7 +156,7 @@
             padding-left: 0;
             color: var(--primary-yellow);
             font-family: Arial, sans-serif;
-            font-size: 3.6vh;
+            font-size: min(3vh, 1.68vw);
             font-weight: bold;
             line-height: 1.1;
             white-space: nowrap;
@@ -166,7 +166,7 @@
             margin-top: 0.1vh;
             color: var(--text-muted);
             font-family: Arial, sans-serif;
-            font-size: 2.8vh;
+            font-size: min(2.4vh, 1.35vw);
             font-weight: normal;
             line-height: 1.1;
         }
@@ -195,7 +195,7 @@
             object-fit: contain;
         }
 
-        /* Viewport-based sizes keep the same proportions on HD and 4K TVs. */
+        /* Size text against both screen dimensions to limit wrapping on narrower TVs. */
     </style>
 </head>
 
@@ -205,7 +205,7 @@
 
 <header class="top-info-bar">
     <span>LEYLA DÖNER</span>
-    <span>August-Bebel-Platz 2</span>
+    <span>August Bebel Platz 2</span>
     <span>📞 0176 43573663</span>
 </header>
 
