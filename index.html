@@ -12,7 +12,7 @@
             --accent-red: #e62e00;
             --background-dark: #000000;
             --text-white: #ffffff;
-            --text-muted: #bbbbbb;
+            --text-muted: #dddddd;
             --border-color: #333333;
             --transition-speed: 1s;
         }
@@ -60,7 +60,7 @@
             background: var(--primary-yellow);
             color: #000000;
             border-bottom: 0.6vh solid var(--accent-red);
-            font-size: 3.2vh;
+            font-size: 4vh;
             font-weight: bold;
             line-height: 1;
             white-space: nowrap;
@@ -73,7 +73,7 @@
             display: none;
             flex: 1;
             min-height: 0;
-            padding: 1.5vh 2vw 0;
+            padding: 1vh 1.5vw 0;
             animation: fade-in var(--transition-speed);
         }
 
@@ -98,7 +98,7 @@
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 2vw;
+            gap: 1.5vw;
             flex: 1;
             min-height: 0;
         }
@@ -120,7 +120,7 @@
             border-radius: 5px;
             background: var(--accent-red);
             color: var(--text-white);
-            font-size: 2.4vh;
+            font-size: 3.6vh;
             line-height: 1.1;
             text-align: center;
             text-transform: uppercase;
@@ -140,30 +140,33 @@
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            gap: 1vw;
+            gap: 0.6vw;
         }
 
         .item-name {
             min-width: 0;
-            font-size: 3vh;
+            font-family: Arial, sans-serif;
+            font-size: 3.6vh;
+            font-weight: 800;
             line-height: 1.1;
         }
 
         .price {
             flex: 0 0 auto;
-            padding-left: 10px;
+            padding-left: 0;
             color: var(--primary-yellow);
-            font-size: 2.2vh;
+            font-family: Arial, sans-serif;
+            font-size: 3.6vh;
             font-weight: bold;
             line-height: 1.1;
             white-space: nowrap;
         }
 
         .description {
-            margin-top: -2px;
+            margin-top: 0.1vh;
             color: var(--text-muted);
             font-family: Arial, sans-serif;
-            font-size: 2.4vh;
+            font-size: 2.8vh;
             font-weight: normal;
             line-height: 1.1;
         }
@@ -192,30 +195,7 @@
             object-fit: contain;
         }
 
-        /*
-         * Smaller displays
-         */
-        @media (max-width: 1100px) {
-            .top-info-bar {
-                font-size: 2.6vh;
-            }
-
-            h2 {
-                font-size: 2.1vh;
-            }
-
-            .item-name {
-                font-size: 1.75vh;
-            }
-
-            .price {
-                font-size: 1.9vh;
-            }
-
-            .description {
-                font-size: 1.2vh;
-            }
-        }
+        /* Viewport-based sizes keep the same proportions on HD and 4K TVs. */
     </style>
 </head>
 
