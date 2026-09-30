@@ -12,7 +12,7 @@
             --accent-red: #e62e00;
             --background-dark: #000000;
             --text-white: #ffffff;
-            --text-muted: #dddddd;
+            --text-muted: #bbbbbb;
             --border-color: #333333;
             --transition-speed: 1s;
         }
@@ -33,8 +33,8 @@
         body {
             display: flex;
             flex-direction: column;
-            /* Keep content clear of TV edges that may be cropped by overscan. */
-            padding: 3vh 4vw;
+            padding-top: 2vh;
+            padding-bottom: 2vh;
             background: var(--background-dark);
             color: var(--text-white);
             font-family: "Arial Black", Arial, sans-serif;
@@ -60,7 +60,7 @@
             background: var(--primary-yellow);
             color: #000000;
             border-bottom: 0.6vh solid var(--accent-red);
-            font-size: min(3.3vh, 1.85vw);
+            font-size: 3.2vh;
             font-weight: bold;
             line-height: 1;
             white-space: nowrap;
@@ -73,7 +73,7 @@
             display: none;
             flex: 1;
             min-height: 0;
-            padding: 1vh 0 0;
+            padding: 1.5vh 2vw 0;
             animation: fade-in var(--transition-speed);
         }
 
@@ -98,7 +98,7 @@
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 1.5vw;
+            gap: 2vw;
             flex: 1;
             min-height: 0;
         }
@@ -115,12 +115,12 @@
          */
         h2 {
             flex: 0 0 auto;
-            margin: 0.35vh 0;
-            padding: 0.4vh;
+            margin: 0.5vh 0;
+            padding: 0.5vh;
             border-radius: 5px;
             background: var(--accent-red);
             color: var(--text-white);
-            font-size: min(3vh, 1.68vw);
+            font-size: 2.4vh;
             line-height: 1.1;
             text-align: center;
             text-transform: uppercase;
@@ -131,8 +131,8 @@
          */
         .item-container {
             flex: 0 0 auto;
-            margin-bottom: 0.25vh;
-            padding-bottom: 0.15vh;
+            margin-bottom: 0.4vh;
+            padding-bottom: 0.2vh;
             border-bottom: 1px solid var(--border-color);
         }
 
@@ -140,33 +140,30 @@
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            gap: 0.6vw;
+            gap: 1vw;
         }
 
         .item-name {
             min-width: 0;
-            font-family: Arial, sans-serif;
-            font-size: min(3.2vh, 1.8vw);
-            font-weight: 800;
+            font-size: 2vh;
             line-height: 1.1;
         }
 
         .price {
             flex: 0 0 auto;
-            padding-left: 0;
+            padding-left: 10px;
             color: var(--primary-yellow);
-            font-family: Arial, sans-serif;
-            font-size: min(3vh, 1.68vw);
+            font-size: 2.2vh;
             font-weight: bold;
             line-height: 1.1;
             white-space: nowrap;
         }
 
         .description {
-            margin-top: 0.1vh;
+            margin-top: -2px;
             color: var(--text-muted);
             font-family: Arial, sans-serif;
-            font-size: min(2.4vh, 1.35vw);
+            font-size: 1.4vh;
             font-weight: normal;
             line-height: 1.1;
         }
@@ -195,7 +192,30 @@
             object-fit: contain;
         }
 
-        /* Size text against both screen dimensions to limit wrapping on narrower TVs. */
+        /*
+         * Smaller displays
+         */
+        @media (max-width: 1100px) {
+            .top-info-bar {
+                font-size: 2.6vh;
+            }
+
+            h2 {
+                font-size: 2.1vh;
+            }
+
+            .item-name {
+                font-size: 1.75vh;
+            }
+
+            .price {
+                font-size: 1.9vh;
+            }
+
+            .description {
+                font-size: 1.2vh;
+            }
+        }
     </style>
 </head>
 
@@ -319,7 +339,7 @@
             </div>
 
             <div class="img-box">
-                <!-- <img src="2.png" alt="Kebab-Angebot"> -->
+                <img class="dailyImage" src="7.png" alt="Döner">
             </div>
 
         </section>
@@ -423,7 +443,7 @@
             </div>
 
             <div class="img-box">
-                <!-- <img src="2.png" alt="Dürüm-Angebot"> -->
+                <img class="dailyImage" src="7.png" alt="Döner">
             </div>
 
         </section>
@@ -515,7 +535,7 @@
             </div>
 
             <div class="img-box">
-                <!-- <img src="2.png" alt="Döner-Angebot"> -->
+                <img class="dailyImage" src="7.png" alt="Döner">
             </div>
 
         </section>
@@ -523,6 +543,18 @@
     </div>
 
 </main>
+<script>
+    var day = new Date().getDay();
 
+    if (day === 0) {
+        day = 7;
+    }
+
+    var images = document.getElementsByClassName('dailyImage');
+
+    for (var i = 0; i < images.length; i++) {
+        images[i].src = day + '.png';
+    }
+</script>
 </body>
 </html>
